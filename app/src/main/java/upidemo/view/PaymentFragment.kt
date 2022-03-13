@@ -78,7 +78,8 @@ class PaymentFragment : Fragment() {
             binding.radiogroupPaymentBraintree.visibility = View.GONE
             binding.radiogroupPaymentCn.visibility = View.GONE
             mDemoViewModel.getAccessToken("kfc_upi_usd")
-            mDemoViewModel.setPaymentMethod(CPayMethodType.ALI)
+            mDemoViewModel.setPaymentMethod(R.id.radiogroup_payment_cn,
+                binding.radiogroupPaymentCn.checkedRadioButtonId)
         }
 
         binding.buttonNewBraintree.setOnClickListener {
@@ -87,6 +88,8 @@ class PaymentFragment : Fragment() {
             binding.radiogroupPaymentBraintree.visibility = View.GONE
             binding.radiogroupPaymentCn.visibility = View.GONE
             mDemoViewModel.getAccessToken("braintree")
+            mDemoViewModel.setPaymentMethod(R.id.radiogroup_payment_braintree,
+                binding.radiogroupPaymentCn.checkedRadioButtonId)
         }
 //        binding.buttonFirst.setOnClickListener {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)

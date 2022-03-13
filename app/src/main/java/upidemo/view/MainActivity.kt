@@ -2,6 +2,7 @@ package upidemo.view
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.ActivityResult
@@ -41,20 +42,22 @@ class MainActivity : AppCompatActivity() {
 
                     alertdialog.setMessage(
                         String.format(
-                            Locale.CANADA, "this is merchant demo APP\n paid %s %d",
-                            orderResult.currency, orderResult.amount
-                        )
-                    ).create().show()
+                            Locale.CANADA, "this is merchant demo APP\n\n paid %s %d\n" +
+                                    "transaction: %s\n created at %s",
+                            orderResult.currency, orderResult.amount, orderResult.transactionId,
+                            DateFormat.format("MM/dd/yyyy hh:mm:ss a", Date(orderResult.time)).toString()
+                        )).create().show()
                 }
 
             } else {
                 val message: String
                 if (result.data == null) {
-                    message = "this is merchant demo APP\n payment cancelled by user"
+                    message = "this is merchant demo APP\n\n payment cancelled by user"
                 } else {
                     val error: CPayOrderResult =
                         result.data!!.getSerializableExtra(Constant.PAYMENT_RESULT) as CPayOrderResult
                     message = """this is merchant demo APP
+                        
                              payment cancelled :
                              ${error.message} - ${error.code}"""
                 }

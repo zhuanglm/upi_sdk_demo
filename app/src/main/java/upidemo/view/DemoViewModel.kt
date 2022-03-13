@@ -28,7 +28,7 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
     val mChargeToken by lazy { MutableLiveData<String>() }
     private lateinit var mReference: String
     internal var mConsumerID: String = MainActivity.DEFAULT_CONSUMER_ID
-    private var mChosePaymentMethod = CPayMethodType.PAYPAL
+    private lateinit var mChosePaymentMethod: CPayMethodType
     internal var mIs3DS: Boolean = false
     var mAmount = "1"
     lateinit var mCallback : String
@@ -59,9 +59,30 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
         return mReference
     }
 
+    internal fun setPaymentMethod(groupID: Int, id: Int) {
+        groupID.let {
+            mChosePaymentMethod = if(it == R.id.radiogroup_payment_cn) {
+                when (id) {
+                    R.id.radioButton_upop -> CPayMethodType.UNIONPAY
+                    R.id.radioButton_wechat -> CPayMethodType.WECHAT
+                    R.id.radioButton_alipay -> CPayMethodType.ALI
+                    else -> CPayMethodType.WECHAT
+                }
+            } else {
+                when (id) {
+                    R.id.radioButton_paypal -> CPayMethodType.PAYPAL
+                    R.id.radioButton_venmo -> CPayMethodType.PAY_WITH_VENMO
+                    R.id.radioButton_credit -> CPayMethodType.UNKNOWN
+                    else -> CPayMethodType.UNKNOWN
+                }
+            }
+        }
+    }
+
     fun setPaymentMethod(type: CPayMethodType) {
         mChosePaymentMethod = type
     }
+
 
     fun getPaymentMethod(): CPayMethodType {
         return mChosePaymentMethod
@@ -190,15 +211,9 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onPaymentTypeChanged(radioGroup: RadioGroup?, id: Int) {
-        when (id) {
-            R.id.radioButton_upop -> mChosePaymentMethod = CPayMethodType.UNIONPAY
-            R.id.radioButton_wechat -> mChosePaymentMethod = CPayMethodType.WECHAT
-            R.id.radioButton_alipay -> mChosePaymentMethod = CPayMethodType.ALI
-            R.id.radioButton_paypal -> mChosePaymentMethod = CPayMethodType.PAYPAL
-            R.id.radioButton_venmo -> mChosePaymentMethod = CPayMethodType.PAY_WITH_VENMO
-            R.id.radioButton_credit -> mChosePaymentMethod = CPayMethodType.UNKNOWN
+        radioGroup?.let {
+            setPaymentMethod(it.id, id)
         }
-
     }
 
 }
