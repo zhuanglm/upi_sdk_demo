@@ -34,6 +34,7 @@ class PaymentFragment : Fragment() {
 
         _binding = FragmentPaymentBinding.inflate(inflater, container, false)
         binding.viewModel = mDemoViewModel
+
         return binding.root
 
     }
@@ -46,6 +47,10 @@ class PaymentFragment : Fragment() {
 
         mDemoViewModel.mCurrencyIndex.observe(viewLifecycleOwner) {
             mDemoViewModel.mCurrency = resources.getStringArray(R.array.currency_list)[it]
+        }
+
+        mDemoViewModel.mResultString.observe(viewLifecycleOwner) {
+            binding.tvResult.text = mDemoViewModel.mResultString.value
         }
 
         binding.editConsumerId.addTextChangedListener(
@@ -89,7 +94,7 @@ class PaymentFragment : Fragment() {
             binding.radiogroupPaymentCn.visibility = View.GONE
             mDemoViewModel.getAccessToken("braintree")
             mDemoViewModel.setPaymentMethod(R.id.radiogroup_payment_braintree,
-                binding.radiogroupPaymentCn.checkedRadioButtonId)
+                binding.radiogroupPaymentBraintree.checkedRadioButtonId)
         }
 //        binding.buttonFirst.setOnClickListener {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)

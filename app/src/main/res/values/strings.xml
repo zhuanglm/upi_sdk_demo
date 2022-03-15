@@ -12,6 +12,7 @@
     <string name="three_ds">3DSecure Verification</string>
     <string name="consumer_id">consumer ID</string>
     <string name="access_token">Access Token:</string>
+    <string name="result_title">Result:</string>
     <string name="reference">Reference ID:</string>
     <string name="paypal">Paypal</string>
     <string name="credit_card">Credit Card</string>

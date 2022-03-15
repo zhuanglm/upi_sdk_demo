@@ -32,6 +32,7 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
     internal var mIs3DS: Boolean = false
     var mAmount = "1"
     lateinit var mCallback : String
+    val mResultString by lazy { MutableLiveData<String>() }
     val mCurrencyIndex = MutableLiveData(0)
     val mErrorMessage by lazy { MutableLiveData<ErrorMessage>() }
     var mCurrency = application.resources.getStringArray(R.array.currency_list)[0]!!

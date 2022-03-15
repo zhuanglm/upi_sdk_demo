@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
                     val orderResult = it.getSerializableExtra(Constant.PAYMENT_RESULT)
                             as CPayOrderResult
 
+                    mDemoViewModel.mResultString.postValue(orderResult.toString())
+
                     alertdialog.setMessage(
                         String.format(
                             Locale.CANADA, "this is merchant demo APP\n\n paid %s %d\n" +
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                             orderResult.currency, orderResult.amount, orderResult.transactionId,
                             DateFormat.format("MM/dd/yyyy hh:mm:ss a", Date(orderResult.time)).toString()
                         )).create().show()
+
                 }
 
             } else {
