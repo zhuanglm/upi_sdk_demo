@@ -9,11 +9,14 @@
     <string name="pay">Pay</string>
     <string name="new_payment">New Access Token</string>
     <string name="new_braintree">New Braintree Token</string>
+    <string name="inquire">Inquire</string>
     <string name="three_ds">3DSecure Verification</string>
     <string name="consumer_id">consumer ID</string>
-    <string name="access_token">Access Token:</string>
-    <string name="result_title">Result:</string>
-    <string name="reference">Reference ID:</string>
+    <string name="access_token">Access Token </string>
+    <string name="result_title">Result </string>
+    <string name="reference">Reference ID </string>
+    <string name="inquire_ref">Inquire By Reference</string>
+    <string name="transaction">Transaction ID </string>
     <string name="paypal">Paypal</string>
     <string name="credit_card">Credit Card</string>
     <string name="venmo">Venmo</string>
@@ -21,6 +24,8 @@
     <string name="wechat">WechatPay</string>
     <string name="upop">UnionPay</string>
     <string name="amount">AMOUNT</string>
+    <string name="timeout">Timeout</string>
+    <string name="auth_key">Auth key</string>
     <string name="callback_url">callback URL</string>
     <string name="default_callback_url">https://dev.citcon-inc.com"</string>
 

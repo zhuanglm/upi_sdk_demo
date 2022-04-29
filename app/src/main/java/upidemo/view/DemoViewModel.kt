@@ -7,7 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import citcon.cpay.R
 import com.citconpay.sdk.data.model.*
-import com.citconpay.sdk.data.model.CPayRequest.CPayUPIBuilder.accessToken
+import com.citconpay.sdk.data.model.CPayRequest.BillingAdressBuilder.city
+import com.citconpay.sdk.data.model.CPayRequest.ConsumerBuilder.firstName
 import com.citconpay.sdk.data.repository.CPayENVMode
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
@@ -31,15 +32,18 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var mChosePaymentMethod: CPayMethodType
     internal var mIs3DS: Boolean = false
     var mAmount = "1"
+    var mTimeout = "60000"
     lateinit var mCallback : String
     val mResultString by lazy { MutableLiveData<String>() }
     val mCurrencyIndex = MutableLiveData(0)
+    val mCountryIndex = MutableLiveData(0)
     val mErrorMessage by lazy { MutableLiveData<ErrorMessage>() }
     var mCurrency = application.resources.getStringArray(R.array.currency_list)[0]!!
+    var mCountry = application.resources.getStringArray(R.array.country_list)[0]!!
 
     object RetrofitClient {
 
-        private const val BASE_URL = "https://api.qa01.citconpay.com/v1/"
+        private const val BASE_URL = /*"https://api.qa01.citconpay.com/v1/"*/"https://api.sandbox.citconpay.com/v1/"
 
         private val okHttpClient = OkHttpClient.Builder()
             .callTimeout(30, TimeUnit.SECONDS)
@@ -111,8 +115,9 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
                     "Bearer $authType", "application/json",
                     RequestAccessToken().setTokenType("client")
                 )
-                mAccessToken.postValue(responseAccessToken.data.access_token)
                 mReference = RandomStringUtils.randomAlphanumeric(10)
+                mAccessToken.postValue(responseAccessToken.data.access_token)
+
             } catch (e: HttpException) {
                 val errorMsg = handleErrorMsg(e)
                 mAccessToken.postValue("Error: ${errorMsg.message} ( ${errorMsg.debug} )")
@@ -130,7 +135,7 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
                             mReference,
                             mAmount.toInt(),
                             mCurrency,
-                            "US",
+                            mCountry,
                             false,
                             "braintree test"
                         ), Urls(
@@ -160,9 +165,10 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
     internal fun buildDropInRequest(type: CPayMethodType): CPayRequest {
         when (type) {
             CPayMethodType.ALI,CPayMethodType.UNIONPAY, CPayMethodType.WECHAT -> {
-                return accessToken(mAccessToken.value!!)
+                return CPayRequest.UPIOrderBuilder
+                    .accessToken(mAccessToken.value!!)
                     .reference(mReference)
-                    .customerID(mConsumerID)
+                    .consumerID(mConsumerID)
                     .currency(mCurrency)
                     .amount(mAmount)
                     .callbackURL(mCallback)
@@ -172,24 +178,64 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
                     .failURL("https://exampe.com/fail")
                     .setAllowDuplicate(true)
                     .paymentMethod(type)
-                    .country(Locale.CANADA)
-                    .build(CPayENVMode.QA)
+                    .country(Locale(mCountry))
+                    .setTimeout(mTimeout.toLong())
+                    .build(CPayENVMode.UAT)
             }
             else -> {
                 return CPayRequest.PaymentBuilder
-                .accessToken(mAccessToken.value!!)
-                .chargeToken(mChargeToken.value!!)
-                .reference(mReference)
-                .customerID(mConsumerID)
-                .request3DSecureVerification(mIs3DS)
-                .threeDSecureRequest(demoThreeDSecureRequest())
-                .paymentMethod(type)
-                .build(CPayENVMode.QA)
+                    .accessToken(mAccessToken.value!!)
+                    .chargeToken(mChargeToken.value!!)
+                    .reference(mReference)
+                    .consumerID(mConsumerID)
+                    .request3DSecureVerification(mIs3DS)
+                    //.threeDSecureRequest(demoThreeDSecureRequest())
+                    .consumer(demo3DSsetup()!!)
+                    .paymentMethod(type)
+                    .build(CPayENVMode.UAT)
             }
         }
     }
 
-    private fun demoThreeDSecureRequest(): Citcon3DSecureRequest {
+    /*private Citcon3DSecureRequest demoThreeDSecureRequest() {
+        CPay3DSecurePostalAddress billingAddress = new CPay3DSecurePostalAddress()
+                .givenName("Jill")
+                .surname("Doe")
+                .phoneNumber("5551234567")
+                .streetAddress("555 Smith St")
+                .extendedAddress("#2")
+                .locality("Chicago")
+                .region("IL")
+                .postalCode("12345")
+                .countryCodeAlpha2("US");
+
+        CPay3DSecureAdditionalInfo additionalInformation = new CPay3DSecureAdditionalInfo()
+                .accountId("account-id");
+
+        return new Citcon3DSecureRequest()
+                .amount("1.00")
+                .versionRequested(Citcon3DSecureRequest.VERSION_2)
+                .email("test@email.com")
+                .mobilePhoneNumber("3125551234")
+                .billingAddress(billingAddress)
+                .additionalInformation(additionalInformation);
+    }*/
+    private fun demo3DSsetup(): CPayConsumer? {
+        val billingAddr = city("Chicago")
+            .state("IL")
+            .street("555 Smith St")
+            .postCode("12345")
+            .country("US")
+            .build()
+        return firstName("Alex")
+            .lastName("Smith")
+            .email("google@gmal.com")
+            .phone("1112223344")
+            .billingAddress(billingAddr)
+            .build()
+    }
+
+    /*private fun demoThreeDSecureRequest(): Citcon3DSecureRequest {
         val billingAddress = CPay3DSecurePostalAddress()
             .givenName("Jill")
             .surname("Doe")
@@ -209,7 +255,7 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
             .mobilePhoneNumber("3125551234")
             .billingAddress(billingAddress)
             .additionalInformation(additionalInformation)
-    }
+    }*/
 
     fun onPaymentTypeChanged(radioGroup: RadioGroup?, id: Int) {
         radioGroup?.let {

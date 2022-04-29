@@ -49,6 +49,10 @@ class PaymentFragment : Fragment() {
             mDemoViewModel.mCurrency = resources.getStringArray(R.array.currency_list)[it]
         }
 
+        mDemoViewModel.mCountryIndex.observe(viewLifecycleOwner) {
+            mDemoViewModel.mCountry = resources.getStringArray(R.array.country_list)[it]
+        }
+
         mDemoViewModel.mResultString.observe(viewLifecycleOwner) {
             binding.tvResult.text = mDemoViewModel.mResultString.value
         }
@@ -82,7 +86,7 @@ class PaymentFragment : Fragment() {
             binding.progressBarLoading.visibility = View.VISIBLE
             binding.radiogroupPaymentBraintree.visibility = View.GONE
             binding.radiogroupPaymentCn.visibility = View.GONE
-            mDemoViewModel.getAccessToken("kfc_upi_usd")
+            mDemoViewModel.getAccessToken(binding.authEditText.text.toString())
             mDemoViewModel.setPaymentMethod(R.id.radiogroup_payment_cn,
                 binding.radiogroupPaymentCn.checkedRadioButtonId)
         }
@@ -92,13 +96,17 @@ class PaymentFragment : Fragment() {
             binding.progressBarLoading.visibility = View.VISIBLE
             binding.radiogroupPaymentBraintree.visibility = View.GONE
             binding.radiogroupPaymentCn.visibility = View.GONE
-            mDemoViewModel.getAccessToken("braintree")
+            mDemoViewModel.getAccessToken(binding.authEditText.text.toString())
             mDemoViewModel.setPaymentMethod(R.id.radiogroup_payment_braintree,
                 binding.radiogroupPaymentBraintree.checkedRadioButtonId)
         }
 //        binding.buttonFirst.setOnClickListener {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
 //        }
+
+        binding.buttonInquire.setOnClickListener {
+
+        }
 
         binding.checkBox3DS.setOnCheckedChangeListener {_, isChecked ->
             mDemoViewModel.mIs3DS = isChecked

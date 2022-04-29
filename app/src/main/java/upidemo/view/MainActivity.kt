@@ -16,7 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import citcon.cpay.R
 import citcon.cpay.databinding.ActivityMainBinding
 import com.citconpay.sdk.data.model.CPayMethodType
-import com.citconpay.sdk.data.model.CPayOrderResult
+import com.citconpay.sdk.data.model.CPayResult
 import com.citconpay.sdk.utils.Constant
 import java.util.*
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 result.data?.let {
                     val orderResult = it.getSerializableExtra(Constant.PAYMENT_RESULT)
-                            as CPayOrderResult
+                            as CPayResult
 
                     mDemoViewModel.mResultString.postValue(orderResult.toString())
 
@@ -57,8 +57,8 @@ class MainActivity : AppCompatActivity() {
                 if (result.data == null) {
                     message = "this is merchant demo APP\n\n payment cancelled by user"
                 } else {
-                    val error: CPayOrderResult =
-                        result.data!!.getSerializableExtra(Constant.PAYMENT_RESULT) as CPayOrderResult
+                    val error: CPayResult =
+                        result.data!!.getSerializableExtra(Constant.PAYMENT_RESULT) as CPayResult
                     message = """this is merchant demo APP
                         
                              payment cancelled :

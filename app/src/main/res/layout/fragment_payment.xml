@@ -47,30 +47,73 @@
                     android:id="@+id/checkBox_3DS"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="6"
                     android:text="@string/three_ds" />
+
+                <TextView
+                    android:id="@+id/timeout_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:text="@string/timeout"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/timeout_editText"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:background="@drawable/rect"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@={viewModel.mTimeout}"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="4dp"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/button_new_payment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
-                    android:text="@string/new_payment" />
+                    android:text="@string/auth_key"
+                    android:textSize="14sp" />
 
-                <Button
-                    android:id="@+id/button_new_braintree"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                <EditText
+                    android:id="@+id/auth_editText"
+                    android:layout_width="200dp"
+                    android:layout_height="25dp"
+                    android:layout_weight="3"
+                    android:autofillHints=""
+                    android:background="@drawable/rect"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="kfc_upi_usd"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor" />
+
+                <Spinner
+                    android:id="@+id/select_country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="0dp"
                     android:layout_weight="1"
-                    android:text="@string/new_braintree" />
+                    android:textSize="14sp"
+                    android:background="@drawable/rect"
+                    android:entries="@array/country_list"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:selectedItemPosition="@={ viewModel.mCountryIndex }" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -130,6 +173,28 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_new_payment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/new_payment" />
+
+                <Button
+                    android:id="@+id/button_new_braintree"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/new_braintree" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
@@ -172,6 +237,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
+
+            <Button
+                android:id="@+id/button_inquire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone"
+                android:text="@string/inquire_ref" />
 
             <LinearLayout
                 android:layout_width="match_parent"
