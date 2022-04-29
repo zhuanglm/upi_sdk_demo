@@ -17,38 +17,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    File keystore = rootProject.file("/Users/raymond.zhuang/StudioProjects/certificate/android_pos.jks")
-    if ( keystore.isFile() ) {
-        println 'Use local keystore'
-    } else {
-        keystore = new File("release.keystore")
-        println 'Github action keystore'
-    }
-
-    signingConfigs {
-        debug {
-            storePassword 'MitenoUSA1234'
-            keyPassword 'MitenoUSA1234'
-            keyAlias 'android_pos'
-            storeFile file(keystore)
-        }
-        release {
-            storeFile keystore
-            storePassword "MitenoUSA1234"
-            keyAlias "android_pos"
-            keyPassword "MitenoUSA1234"
-        }
-
-    }
-
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
-            signingConfig signingConfigs.release
         }
     }
 
