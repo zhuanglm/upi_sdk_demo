@@ -179,7 +179,7 @@ class DemoViewModel(application: Application) : AndroidViewModel(application) {
                     .setAllowDuplicate(true)
                     .paymentMethod(type)
                     .country(Locale(mCountry))
-                    .setTimeout(mTimeout.toLong())
+                    .setExpiry(System.currentTimeMillis()+mTimeout.toLong())
                     .build(CPayENVMode.UAT)
             }
             else -> {
